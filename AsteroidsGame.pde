@@ -1,15 +1,122 @@
-//your variable declarations here
+Spaceship anna;
+Star[] stars = new Star[100];
 public void setup() 
 {
-  //your code here
+  size(600,600);
+  anna = new Spaceship();
+  for(int i = 0; i < 100; i++)
+  {
+    stars[i] = new Star();
+  }
 }
 public void draw() 
 {
-  //your code here
+  background(0);
+  anna.show();
+  anna.move();
+  for(int i = 0; i < 100; i++)
+  {
+    stars[i].show();
+  }
 }
-class SpaceShip //extends Floater  
+
+public void keyPressed()
+{
+  if (key == 'a')
+  {
+    anna.rotate(-5);
+  }
+  if(key == 'd')
+  {
+    anna.rotate(5);
+  }
+  if(key == 'w')
+  {
+    anna.accelerate(0.5);
+  }
+  if (key == 's')
+  {
+    anna.setPointDirection((int)(Math.random()*600));
+    anna.setDirectionX(0);
+    anna.setDirectionY(0);
+    anna.setX((int)(Math.random()*600));
+    anna.setY((int)(Math.random()*600)); 
+  }
+} 
+
+class Star
+{
+  int starX, starY,starColor;
+  public Star()
+  {
+    starX = (int)(Math.random()*600);
+    starY = (int)(Math.random()*600);
+    starColor = 255;
+  }
+  public void show()
+  {
+    stroke(starColor);
+    point(starX, starY);
+  }
+}
+
+class Spaceship extends Floater  
 {   
-    //your code here
+  public Spaceship()
+  {
+      corners = 4;
+      int[] xS = {-5,10,-5,-2};
+      int[] yS = {-5,0,5,0};
+      xCorners = xS;
+      yCorners = yS;
+      myColor = 180;
+      myCenterX = 300;
+      myCenterY = 300;
+      myDirectionX = 0;
+      myDirectionY = 0;
+      
+  }
+  public void setX(int x)  
+  {
+    myCenterX = x;
+  }
+  public int getX()
+  {
+    return (int)myCenterX;
+  }   
+  public void setY(int y)
+  {
+    myCenterY = y;
+  }   
+  public int getY()
+  {
+    return (int)myCenterY;
+  }   
+  public void setDirectionX(double x)
+  {
+    myDirectionX = x;
+  }   
+  public double getDirectionX()
+  {
+    return (double)myDirectionX;
+  }  
+  public void setDirectionY(double y)
+  {
+    myDirectionY = y;
+  }   
+  public double getDirectionY()
+  {
+    return (double)myDirectionY;
+  }   
+ public void setPointDirection(int degrees)
+  {
+    myPointDirection = degrees;
+  }   
+  public double getPointDirection()
+  {
+    return (double)myPointDirection;
+  }
+
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
