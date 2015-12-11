@@ -1,6 +1,7 @@
 Spaceship anna;
-Asteroids[] asteroid = new Asteroids[50];
 Star[] stars = new Star[100];
+ArrayList <Asteroids> asteroid = new ArrayList <Asteroids>(25);
+ArrayList <Bullet> bullets = new ArrayList <Bullet>(1);
 public void setup() 
 {
   size(600,600);
@@ -9,9 +10,9 @@ public void setup()
   {
     stars[i] = new Star();
   }
-  for (int a = 0; a < 50; a++)
+  for (int a = 0; a < 25; a++)
   {
-    asteroid[a] = new Asteroids();
+    asteroid.add(new Asteroids()); 
   }
 }
 public void draw() 
@@ -23,11 +24,28 @@ public void draw()
   {
     stars[i].show();
   }
-  for (int a = 0; a < 50; a++)
+  for (int a = 0; a < asteroid.size(); a++)
   {
-    asteroid[a].show();
-    asteroid[a].move();
+    asteroid.get(a).show();
+    asteroid.get(a).move();
+    if (dist(anna.getX(), anna.getY(), asteroid.get(a).getX(), asteroid.get(a).getY()) < 15)
+    {
+      asteroid.remove(a);
+    }
+    for (int b = 0; b < bullets.size(); b++)
+    {
+      if (dist(bullets.get(b).getX(), bullets.get(b).getY(), asteroid.get(a).getX(), asteroid.get(a).getY()) < 15)
+    {
+      asteroid.remove(a);
+      break;
+    }
+    }
   }
+  for (int a = 0; a<bullets.size(); a++)
+  {
+    bullets.get(a).Show();
+  }
+
 }
 
 public void keyPressed()
@@ -51,6 +69,10 @@ public void keyPressed()
     anna.setDirectionY(0);
     anna.setX((int)(Math.random()*600));
     anna.setY((int)(Math.random()*600)); 
+  }
+  if (key == ' ')
+  {
+    bullets.add(new Bullet(anna));
   }
 } 
 
@@ -79,7 +101,7 @@ class Spaceship extends Floater
       int[] yS = {-5,0,5,0};
       xCorners = xS;
       yCorners = yS;
-      myColor = 180;
+      myColor = 255;
       myCenterX = 300;
       myCenterY = 300;
       myDirectionX = 0;
@@ -215,7 +237,7 @@ class Asteroids extends Floater
     xCorners = xS;   
     int[] xY = {0, 4, -4, 0, -2};
     yCorners = xY;    
-    myColor = 230;
+    myColor = 100;
     myCenterX = (int)(Math.random()*600);
     myCenterY = (int)(Math.random()*600);
     myDirectionX = (int)(Math.random()*5) - 2;
@@ -266,6 +288,64 @@ class Asteroids extends Floater
   {
     rotate(rotSpeed);
     super.move();
+  }
+
+}
+
+class Bullet extends Floater
+{
+  Bullet(Spaceship theShip)
+  {
+    myCenterX = theShip.getX();
+    myCenterY = theShip.getY();
+    double dRadians =myPointDirection*(Math.PI/180);
+    myDirectionX = 5 * Math.cos(dRadians) + theShip.getDirectionX();
+    myDirectionY = 5 * Math.sin(dRadians) + theShip.getDirectionY();
+  }
+  public void Show()
+  {
+    fill(140,130,240);
+    ellipse((int)myCenterX,(int)myCenterY,10,10);
+  }
+  public void setX(int x)  
+  {
+    myCenterX = x;
+  }
+  public int getX()
+  {
+    return (int)myCenterX;
+  }   
+  public void setY(int y)
+  {
+    myCenterY = y;
+  }   
+  public int getY()
+  {
+    return (int)myCenterY;
+  }   
+  public void setDirectionX(double x)
+  {
+    myDirectionX = x;
+  }   
+  public double getDirectionX()
+  {
+    return (double)myDirectionX;
+  }  
+  public void setDirectionY(double y)
+  {
+    myDirectionY = y;
+  }   
+  public double getDirectionY()
+  {
+    return (double)myDirectionY;
+  }   
+ public void setPointDirection(int degrees)
+  {
+    myPointDirection = degrees;
+  }   
+  public double getPointDirection()
+  {
+    return (double)myPointDirection;
   }
 
 }
